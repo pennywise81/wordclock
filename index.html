@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WordClock</title>
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:200,300,400" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #000;
+    }
+
+    .clock {
+      color: #222;
+      font-family: 'Source Code Pro', monospace;
+      font-size: 9.9vh;
+      font-weight: 200;
+      letter-spacing: 4.2vw;
+      line-height: 9.9vh;
+      text-transform: uppercase;
+    }
+
+    .word, .indicator {
+      transition: color 0.2s ease;
+    }
+
+    .active {
+      transition: color 0.3s ease;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="clock">
+    <span class="word word-es">es</span>k<span class="word word-ist">ist</span>l<span class="word word-kurz">kurz</span><br />
+    <span class="word word-zehn-minuten">zehn</span><span class="word word-zwanzig">zwanzig</span><br />
+    <span class="word word-drei-minuten">drei</span><span class="word word-viertel">viertel</span><br />
+    tg<span class="word word-nach">nach</span><span class="word word-vor">vor</span>jm<br />
+    <span class="word word-halb">halb</span>q<span class="word word-zwölf">zwölf</span>p<br />
+    <span class="word word-zwei">zw</span><span class="word word-zwei word-ein word-eins">ei</span><span class="word word-ein word-eins">n</span><span class="word word-eins word-sieben">s</span><span class="word word-sieben">ieben</span><br />
+    k<span class="word word-drei">drei</span>rh<span class="word word-fünf">fünf</span><br />
+    <span class="word word-elf">elf</span><span class="word word-neun">neun</span><span class="word word-vier">vier</span><br />
+    w<span class="word word-acht">acht</span><span class="word word-zehn">zehn</span>rs<br />
+    <span class="word word-sechs">sechs</span>fm<span class="word word-uhr">uhr</span><span class="indicator">.</span><br />
+  </div>
+  <script>
+    (function() {
+      var refresh = function() {
+        var d = new Date(),
+          h = d.getHours(),
+          m = d.getMinutes(),
+          activeWords = ['es', 'ist'],
+          intNames = ['', 'eins', 'zwei', 'drei', 'vier', 'fünf', 'sechs', 'sieben', 'acht', 'neun', 'zehn', 'elf', 'zwölf'];
+
+        if (h > 12) {
+          h -= 12;
+        }
+
+        if (m < 5) {
+          // VOLL
+          activeWords.push('uhr');
+        }
+        else if (m >= 5 && m < 10) {
+          // KURZ NACH
+          activeWords.push('kurz', 'nach');
+        }
+        else if (m >= 10 && m < 15) {
+          // ZEHN NACH
+          activeWords.push('zehn-minuten', 'nach');
+        }
+        else if (m >= 15 && m < 20) {
+          // VIERTEL NACH
+          activeWords.push('viertel', 'nach');
+        }
+        else if (m >= 20 && m < 25) {
+          // ZWANZIG NACH
+          activeWords.push('zwanzig', 'nach');
+        }
+        else if (m >= 25 && m < 30) {
+          // KURZ VOR HALB
+          activeWords.push('kurz', 'vor', 'halb');
+        }
+        else if (m >= 30 && m < 35) {
+          // HALB
+          activeWords.push('halb');
+        }
+        else if (m >= 35 && m < 40) {
+          // KURZ NACH HALB
+          activeWords.push('kurz', 'nach', 'halb');
+        }
+        else if (m >= 40 && m < 45) {
+          // ZWANZIG VOR
+          activeWords.push('zwanzig', 'vor');
+        }
+        else if (m >= 45 && m < 50) {
+          // VIERTEL VOR
+          activeWords.push('viertel', 'vor');
+        }
+        else if (m >= 50 && m < 55) {
+          // ZEHN VOR
+          activeWords.push('zehn-minuten', 'vor');
+        }
+        else if (m >= 55) {
+          // KURZ VOR
+          activeWords.push('kurz', 'vor');
+        }
+
+        if (m >= 25) {
+          h++;
+        }
+
+        activeWords.push(intNames[h]);
+
+        document.querySelectorAll('.word.active').forEach(function(element) {
+          element.classList.remove('active');
+        });
+
+        activeWords.forEach(function(word) {
+          document.querySelectorAll('.word-' + word).forEach(function(element) {
+            element.classList.add('active');
+          });
+        });
+
+        document.querySelector('.indicator').classList.toggle('active');
+      }
+
+      refresh();
+      window.setInterval(refresh, 1000);
+    })();
+  </script>
+</body>
+</html>
